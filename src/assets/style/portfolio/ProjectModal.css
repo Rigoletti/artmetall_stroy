@@ -1,0 +1,130 @@
+.project-modal {
+  border-radius: 16px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.project-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.project-modal .modal-content {
+  border: none;
+  border-radius: 16px;
+}
+
+.modal-project-image {
+  height: 400px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-project-image img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.meta-card {
+  transition: transform 0.2s;
+}
+
+.meta-card:hover {
+  transform: translateY(-2px);
+}
+
+.modal-cta-btn:hover {
+  background-color: #b39152 !important;
+  border-color: #b39152 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(197, 160, 89, 0.3);
+}
+
+/* Анимация при открытии */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+/* Добавьте эти стили в ваш ProjectModal.css */
+.project-modal .modal-body {
+  overflow-y: auto;
+  max-height: 70vh;
+  padding-right: 15px; /* Чтобы контент не заезжал под скроллбар */
+}
+
+/* Кастомный скроллбар */
+.project-modal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.project-modal .modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.project-modal .modal-body::-webkit-scrollbar-thumb {
+  background: #c5a059;
+  border-radius: 10px;
+}
+
+.project-modal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #b39152;
+}
+
+/* Гарантированное отображение скроллбара для всей страницы */
+html {
+  overflow-y: scroll !important;
+}
+
+.project-modal {
+  border-radius: 16px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.project-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.project-modal .modal-content {
+  border: none;
+  border-radius: 16px;
+}
+
+.project-modal .modal-body {
+  overflow-y: auto;
+  max-height: 70vh;
+  padding-right: 15px;
+}
+
+/* Кастомный скроллбар для модального окна */
+.project-modal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.project-modal .modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.project-modal .modal-body::-webkit-scrollbar-thumb {
+  background: #c5a059;
+  border-radius: 10px;
+}
+
+.project-modal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #b39152;
+}
+
