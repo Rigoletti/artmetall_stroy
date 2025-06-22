@@ -1,0 +1,146 @@
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  background-color: #1a1a1a;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.logoText {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.nav {
+  display: flex;
+  gap: 30px;
+}
+
+.navLink {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.navLink:hover {
+  color: #3a7bd5;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #3a7bd5;
+  transition: width 0.3s;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.auth {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.loginBtn, .registerBtn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.loginBtn {
+  color: #e0e0e0;
+  border: 1px solid #3a7bd5;
+}
+
+.loginBtn:hover {
+  background-color: rgba(58, 123, 213, 0.2);
+}
+
+.registerBtn {
+  background-color: #3a7bd5;
+  color: white;
+}
+
+.registerBtn:hover {
+  background-color: #2c6bc7;
+}
+
+.profileMenu {
+  position: relative;
+}
+
+.profileBtn {
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.profileBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #2a2a2a;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #e0e0e0;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: rgba(58, 123, 213, 0.2);
+}
+
+.authLoader {
+  color: #e0e0e0;
+}
