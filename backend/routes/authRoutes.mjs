@@ -8,7 +8,7 @@ import {
   getAvatar
 } from "../controllers/authController.mjs";
 import { protect, admin } from '../middleware/authMiddleware.mjs';
-import { upload, handleUploadErrors } from '../config/multerConfig.mjs';
+import { uploadAvatar, handleUploadErrors } from '../config/multerConfig.mjs';
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.get('/avatar/:userId', getAvatar);
 // Protected routes
 router.get('/me', protect, getMe);
 router.post('/logout', protect, logoutUser);
-router.put('/profile', protect, upload.single('avatar'), handleUploadErrors, updateProfile);
+router.put('/profile', protect, uploadAvatar.single('avatar'), handleUploadErrors, updateProfile);
 
 // Admin routes
 router.get('/admin-check', protect, admin, (req, res) => {

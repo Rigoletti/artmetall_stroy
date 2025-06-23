@@ -63,8 +63,9 @@ export const useAuth = () => {
       throw error;
     }
   };
-
-  const isAdmin = () => user?.role === 'admin';
+const isAdmin = () => {
+  return user?.role === 'admin';
+};
 
   return { 
     user, 

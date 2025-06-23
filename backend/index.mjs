@@ -6,6 +6,13 @@ import cors from 'cors';
 import corsOptions from './config/corsOptions.mjs';
 import authRoutes from './routes/authRoutes.mjs';
 import createAdminUser from './config/initialSetup.mjs';
+import projectCardRoutes from './routes/projectCardRoutes.mjs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -25,8 +32,12 @@ const startServer = async () => {
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
 
+    // Статическая раздача файлов
+    app.use('/api/project-images', express.static(path.join(__dirname, 'uploads', 'project-images')));
+
     // Routes
     app.use('/api/auth', authRoutes);
+    app.use('/api/project-cards', projectCardRoutes);
 
     // Test route
     app.get('/', (req, res) => {

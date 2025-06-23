@@ -21,13 +21,6 @@ const Profile = () => {
   const [success, setSuccess] = useState("");
   const [isHovering, setIsHovering] = useState(false);
 
- 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/login");
-    }
-  }, [user, loading, navigate]);
-
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
