@@ -12,7 +12,12 @@ import Profile from '@/components/profile/Profile';
 import AdminPanel from '@/components/admin/AdminPanel';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AdminRoute from '@/components/auth/AdminRoute';
-
+// направления
+import ArtObjects from './components/directions/art_objects';
+import Fasade from './components/directions/facade';
+import IndustrialConstruction from './components/directions/industrial_construction';
+import MetalStructures from './components/directions/metal_structures';
+import MetalSigns from './components/directions/metall_signs';
 const App = () => {
   return (
     <Router basename="/">
@@ -25,7 +30,11 @@ const App = () => {
         <Route path="/post_project" element={<PostProject />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+        <Route path="/artobject" element={<ArtObjects />} />
+        <Route path="/fasade" element={<Fasade />} />
+        <Route path="/industrial" element={<IndustrialConstruction />} />
+        <Route path="/metalstructures" element={<MetalStructures />} />
+        <Route path="/metalsigns" element={<MetalSigns />} />
         {/* Защищенные маршруты (только для авторизованных) */}
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />

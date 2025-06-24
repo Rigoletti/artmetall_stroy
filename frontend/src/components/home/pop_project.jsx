@@ -2,169 +2,90 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import axios from 'axios';
-import '@/assets/style/home/Pop_Project.css';
+import { Link } from 'react-router-dom';
+import styles from '@/assets/style/home/Pop_Project.module.css';
+
+// Импорты изображений
+import construction1 from '@/assets/img/projects/stroitelstvo.jpg';
+import construction2 from '@/assets/img/projects/metalstructures.webp';
+import construction3 from '@/assets/img/projects/facades.jpg';
+
+import metal1 from '@/assets/img/projects/metalstructures.webp';
+import metal2 from '@/assets/img/projects/metalstructures.webp';
+import metal3 from '@/assets/img/projects/metalstructures.webp';
+
+import facade1 from '@/assets/img/projects/facades.jpg';
+import facade2 from '@/assets/img/projects/facades.jpg';
+import facade3 from '@/assets/img/projects/facades.jpg';
+
+import art1 from '@/assets/img/projects/construction.jpg';
+import art2 from '@/assets/img/projects/construction.jpg';
+import art3 from '@/assets/img/projects/construction.jpg';
+
+import signs1 from '@/assets/img/projects/project8.jpg';
+import signs2 from '@/assets/img/projects/project8.jpg';
+import signs3 from '@/assets/img/projects/project8.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const DirectionCard = ({ data }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loadedImages, setLoadedImages] = useState({});
-  const trackRef = useRef(null);
-  const sliderRef = useRef(null);
-
-  const nextSlide = () => {
-    const newIndex = (currentIndex + 1) % data.images.length;
-    goToSlide(newIndex);
-  };
-
-  const prevSlide = () => {
-    const newIndex = (currentIndex - 1 + data.images.length) % data.images.length;
-    goToSlide(newIndex);
-  };
-
-  const goToSlide = (index) => {
-    if (!trackRef.current || !sliderRef.current) return;
-    
-    const slideWidth = sliderRef.current.offsetWidth;
-    gsap.to(trackRef.current, {
-      x: `-${index * slideWidth}px`,
-      duration: 0.4,
-      ease: "power2.out"
-    });
-    setCurrentIndex(index);
-  };
-
-  const handleImageLoad = (index) => {
-    setLoadedImages(prev => ({ ...prev, [index]: true }));
-  };
-
-  const handleImageError = (index) => {
-    setLoadedImages(prev => ({ ...prev, [index]: false }));
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (trackRef.current && sliderRef.current) {
-        const slideWidth = sliderRef.current.offsetWidth;
-        gsap.set(trackRef.current, { x: `-${currentIndex * slideWidth}px` });
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [currentIndex]);
-
-  return (
-    <div 
-      className="direction-card"
-      style={{ '--accent-color': data.color }}
-    >
-      <div className="direction-header">
-        <div className="direction-icon">{data.icon}</div>
-        <div className="direction-title-wrapper">
-          <span className="direction-category">{data.category}</span>
-          <h3 className="direction-title">{data.title}</h3>
-        </div>
-      </div>
-      
-      <p className="direction-description">{data.description}</p>
-      
-      <div className="direction-slider" ref={sliderRef}>
-        <div className="slider-track" ref={trackRef}>
-          {data.images.map((img, index) => (
-            <div key={index} className="slider-slide">
-              {loadedImages[index] === false ? (
-                <div className="image-error-placeholder">
-                  <span>Изображение недоступно</span>
-                </div>
-              ) : (
-                <img 
-                  src={`http://localhost:5000${img}`}
-                  alt={`${data.title} пример ${index+1}`}
-                  loading="lazy"
-                  onLoad={() => handleImageLoad(index)}
-                  onError={() => handleImageError(index)}
-                  style={{ display: loadedImages[index] ? 'block' : 'none' }}
-                />
-              )}
-              {!loadedImages[index] && loadedImages[index] !== false && (
-                <div className="image-loading-placeholder">
-                  <div className="loading-spinner"></div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        
-        <button 
-          className="slider-nav prev"
-          onClick={prevSlide}
-          aria-label="Previous slide"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-        
-        <button 
-          className="slider-nav next"
-          onClick={nextSlide}
-          aria-label="Next slide"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-        
-        <div className="slider-dots">
-          {data.images.map((_, index) => (
-            <button
-              key={index}
-              className={`dot ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => goToSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Pop_Project = () => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const [directions, setDirections] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
+  const directions = [
+    {
+      id: 1,
+      title: "Промышленное строительство",
+      category: "Строительство",
+      description: "Полный цикл от проектирования до сдачи объекта",
+      color: "#FF5E1A",
+      icon: "🏗️",
+      images: [construction1, construction2, construction3],
+      link: "/industrial"
+    },
+    {
+      id: 2,
+      title: "Металлоконструкции",
+      category: "Металл",
+      description: "Изготовление и монтаж любой сложности",
+      color: "#00C2FF",
+      icon: "🔩",
+      images: [metal1, metal2, metal3],
+      link: "/metalstructures"
+    },
+    {
+      id: 3,
+      title: "Фасадные решения",
+      category: "Фасады",
+      description: "Современные материалы и технологии",
+      color: "#FF0A6C",
+      icon: "🏢",
+      images: [facade1, facade2, facade3],
+      link: "/fasade" 
+    },
+    {
+      id: 4,
+      title: "Арт-объекты",
+      category: "Арт",
+      description: "Уникальные решения для публичных пространств",
+      color: "#9D00FF",
+      icon: "🎨",
+      images: [art1, art2, art3],
+      link: "/artobject" 
+    },
+    {
+      id: 5,
+      title: "Металлические таблички",
+      category: "Таблички",
+      description: "Элитная навигация и идентификация",
+      color: "#00FFA3",
+      icon: "📍",
+      images: [signs1, signs2, signs3],
+      link: "/metalsigns"
+    }
+  ];
 
   useEffect(() => {
-    const fetchDirections = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/project-cards');
-        // Фильтруем карточки, у которых есть хотя бы одно изображение
-        const validCards = response.data.filter(card => 
-          card.images && card.images.length > 0
-        );
-        setDirections(validCards);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching directions:', err);
-        setError('Не удалось загрузить данные. Пожалуйста, попробуйте позже.');
-        setDirections([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDirections();
-  }, []);
-
-  useEffect(() => {
-    if (directions.length === 0) return;
-
     const ctx = gsap.context(() => {
       if (!sectionRef.current || !titleRef.current) return;
       
@@ -179,9 +100,9 @@ const Pop_Project = () => {
         ease: "power2.out"
       });
 
-      gsap.from(".direction-card", {
+      gsap.from(`.${styles.directionCard}`, {
         scrollTrigger: {
-          trigger: ".directions-grid",
+          trigger: `.${styles.directionsGrid}`,
           start: "top 70%"
         },
         y: 50,
@@ -194,60 +115,171 @@ const Pop_Project = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [directions]);
+  }, []);
 
-  if (loading) {
-    return (
-      <section className="directions-section">
-        <Container>
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-          </div>
-        </Container>
-      </section>
-    );
-  }
+  const DirectionCard = ({ data, isLink = false }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const trackRef = useRef(null);
+    const sliderRef = useRef(null);
 
-  if (error) {
-    return (
-      <section className="directions-section">
-        <Container>
-          <div className="error-message">
-            {error}
-          </div>
-        </Container>
-      </section>
-    );
-  }
+    const nextSlide = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const newIndex = (currentIndex + 1) % data.images.length;
+      goToSlide(newIndex);
+    };
 
-  if (directions.length === 0) {
-    return (
-      <section className="directions-section">
-        <Container>
-          <div className="empty-message">
-            Нет доступных направлений
+    const prevSlide = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const newIndex = (currentIndex - 1 + data.images.length) % data.images.length;
+      goToSlide(newIndex);
+    };
+
+    const goToSlide = (index) => {
+      if (!trackRef.current || !sliderRef.current) return;
+      
+      const slideWidth = sliderRef.current.offsetWidth;
+      gsap.to(trackRef.current, {
+        x: `-${index * slideWidth}px`,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+      setCurrentIndex(index);
+    };
+
+    useEffect(() => {
+      const handleResize = () => {
+        if (trackRef.current && sliderRef.current) {
+          const slideWidth = sliderRef.current.offsetWidth;
+          gsap.set(trackRef.current, { x: `-${currentIndex * slideWidth}px` });
+        }
+      };
+
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, [currentIndex]);
+
+    const handleSliderClick = (e) => {
+      // Предотвращаем переход по ссылке при клике на слайдер
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const cardContent = (
+      <div 
+        className={`${styles.directionCard} ${isLink ? styles.linkCard : ''}`}
+        style={{ '--accent-color': data.color }}
+      >
+        <div className={styles.directionHeader}>
+          <div className={styles.directionIcon}>{data.icon}</div>
+          <div className={styles.directionTitleWrapper}>
+            <span className={styles.directionCategory}>{data.category}</span>
+            <h3 className={styles.directionTitle}>{data.title}</h3>
           </div>
-        </Container>
-      </section>
+        </div>
+        
+        <p className={styles.directionDescription}>{data.description}</p>
+        
+        <div 
+          className={styles.directionSlider} 
+          ref={sliderRef}
+          onClick={handleSliderClick}
+        >
+          <div className={styles.sliderTrack} ref={trackRef}>
+            {data.images.map((img, index) => (
+              <div key={index} className={styles.sliderSlide}>
+                <img 
+                  src={img} 
+                  alt={`${data.title} пример ${index+1}`} 
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+          
+          <button 
+            className={`${styles.sliderNav} ${styles.prev}`}
+            onClick={prevSlide}
+            aria-label="Previous slide"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          
+          <button 
+            className={`${styles.sliderNav} ${styles.next}`}
+            onClick={nextSlide}
+            aria-label="Next slide"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          
+          <div className={styles.sliderDots}>
+            {data.images.map((_, index) => (
+              <button
+                key={index}
+                className={`${styles.dot} ${index === currentIndex ? styles.active : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  goToSlide(index);
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     );
-  }
+
+    if (isLink) {
+      return (
+        <div className={styles.directionWrapper}>
+          <Link 
+            to={data.link} 
+            className={styles.directionLink}
+            onClick={(e) => {
+              // Проверяем, был ли клик на элементах слайдера
+              if (e.target.closest(`.${styles.directionSlider}`) || 
+                  e.target.closest(`.${styles.sliderNav}`) || 
+                  e.target.closest(`.${styles.dot}`)) {
+                e.preventDefault();
+              }
+            }}
+          >
+            {cardContent}
+          </Link>
+        </div>
+      );
+    }
+    
+    return cardContent;
+  };
 
   return (
-    <section className="directions-section" ref={sectionRef}>
+    <section className={styles.directionsSection} ref={sectionRef}>
       <Container>
-        <div className="section-header" ref={titleRef}>
-          <h2 className="section-title">Ключевые <span className="highlight">направления</span></h2>
-          <p className="section-subtitle">Профессиональные решения в области металлоконструкций и строительства</p>
+        <div className={styles.sectionHeader} ref={titleRef}>
+          <h2 className={styles.sectionTitle}>Ключевые <span className={styles.highlight}>направления</span></h2>
+          <p className={styles.sectionSubtitle}>Профессиональные решения в области металлоконструкций и строительства</p>
         </div>
 
-        <div className="directions-grid">
+        <div className={styles.directionsGrid}>
           {directions.map((direction) => (
-            <DirectionCard key={direction._id} data={direction} />
+            <DirectionCard 
+              key={direction.id} 
+              data={direction} 
+              isLink={!!direction.link} 
+            />
           ))}
         </div>
       </Container>
     </section>
   );
 };
-
 export default Pop_Project;

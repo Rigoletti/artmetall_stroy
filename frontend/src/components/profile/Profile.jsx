@@ -21,17 +21,38 @@ const Profile = () => {
   const [success, setSuccess] = useState("");
   const [isHovering, setIsHovering] = useState(false);
 
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}></div>
-      </div>
-    );
-  }
+  // Инициализация формы данными пользователя
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        avatar: null
+      });
+      if (user.avatar) {
+        setPreviewAvatar(`http://localhost:5000/api/auth/avatar/${user._id}?${Date.now()}`);
+      }
+    }
+  }, [user]);
 
-  if (!user) {
-    return null;
-  }
+  // Автоматическое скрытие сообщений об ошибке и успехе
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,7 +93,6 @@ const Profile = () => {
 
       setUser(response.data);
       setSuccess("Данные обновлены");
-      setTimeout(() => setEditMode(false), 1500);
     } catch (err) {
       setError(
         err.response?.data?.message || "Ошибка при обновлении профиля"
@@ -216,6 +236,12 @@ const Profile = () => {
                       alt="Аватар" 
                       className={styles.avatarImage}
                     />
+                  ) : user.avatar ? (
+                    <img 
+                      src={`http://localhost:5000/api/auth/avatar/${user._id}?${Date.now()}`}
+                      alt="Аватар"
+                      className={styles.avatarImage}
+                    />
                   ) : (
                     <div className={styles.avatarPlaceholder}>
                       <svg
@@ -281,7 +307,15 @@ const Profile = () => {
                 <motion.button
                   type="button"
                   className={styles.cancelBtn}
-                  onClick={() => setEditMode(false)}
+                  onClick={() => {
+                    setEditMode(false);
+                    setFormData({
+                      name: user.name || "",
+                      email: user.email || "",
+                      avatar: null
+                    });
+                    setPreviewAvatar(user.avatar ? `http://localhost:5000/api/auth/avatar/${user._id}?${Date.now()}` : "");
+                  }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

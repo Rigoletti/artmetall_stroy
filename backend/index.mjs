@@ -6,10 +6,10 @@ import cors from 'cors';
 import corsOptions from './config/corsOptions.mjs';
 import authRoutes from './routes/authRoutes.mjs';
 import createAdminUser from './config/initialSetup.mjs';
-import projectCardRoutes from './routes/projectCardRoutes.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import projectRoutes from './routes/projectRoutes.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,13 +37,7 @@ const startServer = async () => {
 
     // Routes
     app.use('/api/auth', authRoutes);
-    app.use('/api/project-cards', projectCardRoutes);
-
-    // Test route
-    app.get('/', (req, res) => {
-      res.send('API is running...');
-    });
-
+    app.use('/api/projects', projectRoutes);
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

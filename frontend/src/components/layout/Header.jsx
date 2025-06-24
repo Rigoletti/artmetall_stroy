@@ -49,8 +49,9 @@ const Header = ({ controls, darkMode = true }) => {
       <nav className={styles.nav}>
         <Link to="/portfolio" className={styles.navLink}>Портфолио</Link>
         <Link to="/services" className={styles.navLink}>Услуги</Link>
-        <Link to="/about" className={styles.navLink}>О компании</Link>
-        <Link to="/contact" className={styles.navLink}>Контакты</Link>
+         <Link to="/contact" className={styles.navLink}>Контакты</Link>
+        <Link to="/post_project" className={styles.navLink}>Отправить заявку</Link>
+       
         
         {/* Добавляем ссылку на админ-панель для администраторов */}
         {user?.role === 'admin' && (

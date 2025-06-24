@@ -1,21 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useFormik } from "formik";
 import styles from '@/assets/style/auth/Auth.module.css';
 import HomeButton from '@/components/home/HomeButton';
 import authApi from '@/api/authApi';
+import { loginSchema } from '../validation/authSchemas';
 
 const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    email: location.state?.email || "",
-    password: "",
+  const [successMessage, setSuccessMessage] = React.useState("");
+
+  const formik = useFormik({
+    initialValues: {
+      email: location.state?.email || "",
+      password: "",
+      rememberMe: false
+    },
+    validationSchema: loginSchema,
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        await authApi.login(values);
+        navigate("/profile");
+      } catch (err) {
+        setFieldError('password', err.response?.data?.message || 'Неверный email или пароль');
+      } finally {
+        setSubmitting(false);
+      }
+    }
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     if (location.state?.registered) {
@@ -26,28 +40,6 @@ const Login = () => {
       return () => clearTimeout(timer);
     }
   }, [location.state]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setError("");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError("");
-    setSuccessMessage("");
-
-    try {
-      await authApi.login(formData);
-      navigate("/profile");
-    } catch (err) {
-      setError(err.response?.data?.message || "Ошибка входа. Проверьте email и пароль.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <div className={styles.authContainer}>
@@ -65,9 +57,9 @@ const Login = () => {
           </p>
         </div>
 
-        {error && (
+        {formik.errors.password && formik.submitCount > 0 && (
           <div className={styles.errorMessage}>
-            {error}
+            {formik.errors.password}
           </div>
         )}
 
@@ -77,19 +69,22 @@ const Login = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className={styles.authForm}>
+        <form onSubmit={formik.handleSubmit} className={styles.authForm}>
           <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className={styles.formInput}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`${styles.formInput} ${formik.errors.email && formik.touched.email ? styles.inputError : ''}`}
               placeholder="your@email.com"
             />
+            {formik.errors.email && formik.touched.email && (
+              <div className={styles.errorText}>{formik.errors.email}</div>
+            )}
           </div>
 
           <div className={styles.formGroup}>
@@ -98,17 +93,27 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className={styles.formInput}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`${styles.formInput} ${formik.errors.password && formik.touched.password ? styles.inputError : ''}`}
               placeholder="••••••••"
             />
+            {formik.errors.password && formik.touched.password && (
+              <div className={styles.errorText}>{formik.errors.password}</div>
+            )}
           </div>
 
           <div className={styles.formOptions}>
             <label className={styles.rememberMe}>
-              <input type="checkbox" />
+              <input 
+                type="checkbox"
+                id="rememberMe"
+                name="rememberMe"
+                checked={formik.values.rememberMe}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
               <span>Запомнить меня</span>
             </label>
             <Link to="/forgot-password" className={styles.forgotPassword}>
@@ -121,9 +126,9 @@ const Login = () => {
             className={styles.submitButton}
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.98 }}
-            disabled={isSubmitting}
+            disabled={formik.isSubmitting}
           >
-            {isSubmitting ? (
+            {formik.isSubmitting ? (
               <div className={styles.buttonLoader}>
                 <span></span>
                 <span></span>
